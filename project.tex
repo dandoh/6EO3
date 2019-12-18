@@ -1,0 +1,161 @@
+\documentclass[12pt,fleqn]{article}
+
+\usepackage{url}
+\usepackage{amsfonts}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{changepage}
+
+\setlength {\topmargin} {-.15in}
+\setlength {\leftmargin} {-.15in}
+\usepackage{enumitem}
+
+\setlength {\textheight} {8.6in}
+
+\input{def}
+\renewcommand{\labelenumi}{\theenumi.}
+\renewcommand{\labelenumii}{\theenumii.}
+
+\usepackage{scalerel}
+\usepackage{amssymb}
+\newcommand*{\EQUIV}{\ensuremath{\Leftrightarrow & \ \ }}
+\newcommand*{\IMPLY}{\ensuremath{\Rightarrow & \ \ }}
+\newcommand*{\EQUAL}{\ensuremath{= & \ \ }}
+\newcommand*{\LEQ}{\ensuremath{\leq & \ \ }}
+\newcommand*{\BEGIN}{\ensuremath{& \ \ }}
+\newcommand{\INDENT}{$\mathbb{ } \ \ \ $}
+
+\topmargin -.5in
+\textheight 9in
+\oddsidemargin -.25in
+\evensidemargin -.25in
+\textwidth 7in
+
+
+\begin{document}
+
+  \bc
+
+  {\large \textbf{CAS 6EO3}}\\[2mm]
+  {\large \textbf{Fall 2019}}\\[8mm]
+  {\huge \textbf{Project}}\\[6mm]
+  {\large \textbf{Nhan Thai}}\\[2mm]
+  {\large \textbf{thain1@mcmaster.ca}}\\[6mm]
+
+  \ec
+
+  \be
+  \item[(a)] We can model the system with the following network:
+  \begin{center}
+    \includegraphics{network.pdf}
+  \end{center}
+
+  Each request enters and leaves Bus twice. Therefore, in steady state, the probability of a request going from
+  Bus to CPUs equals probability a request going from Bus to memory modules. Thus the numbers $\frac{1}{2}$ and $\frac{1}{2n}$.
+
+  With n = 4.
+
+  \[
+    Z = 25, \mu_{bus} = \frac{1}{2}, \mu_1 = \mu_2 = \mu_3 = \mu_4 = \frac{1}{4}
+  \]
+
+
+  Let visit ratio of CPUs $V_{cpu}$ be $1$:
+  \[
+    \begin{cases}
+      V_{cpu} = 1 \\
+      V_{bus} = V_{cpu} + V_1 + V_2 + V_3 + V_4 \\
+      V_{1} = \frac{1}{2n}V_{cpu} \\
+      V_{2} = \frac{1}{2n}V_{cpu} \\
+      V_{3} = \frac{1}{2n}V_{cpu} \\
+      V_{4} = \frac{1}{2n}V_{cpu} \\
+    \end{cases}
+    \Rightarrow
+    \begin{cases}
+      V_{cpu} = 1 \\
+      V_{bus} = 2 \\
+      V_1 = V_2 = V_3 = V_4 = \frac{1}{4}
+    \end{cases}
+  \]
+
+  Using MVA (\textbf{mva.m}), and in each iteration:
+  \begin{equation*}
+    \begin{split}
+      \BEGIN E[\text{memory request time}] = 2 * E[T_{bus}] + E[T_1] & \text{(Visit bus twice and visit a memory module)} \\
+      \BEGIN \rho_{bus} = \frac{X \times V_{bus}}{\mu_{bus}}
+    \end{split}
+  \end{equation*}
+
+  We get the following result table of bus utilization and mean response time of a memory request
+  as a function of m:
+%  \begin{tabular} {| m | m | m | m |}
+%    \hline
+%    1 & 2 & 3 & 3 & 4
+%  \end{tabular}
+  \begin{center}
+    \begin{tabular}{ |p{3cm}|c|c|c|c|c|c|c|c|c|c| }
+      \hline
+      m & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\
+      \hline
+      Mean memory request response time & 8 & 8.6 & 9.31 & 10.143 & 11.126 & 12.29 & 13.68 & 15.33 & 17.27 & 19.538 \\
+      \hline
+      Bus utilization & 0.12 & 0.24 & 0.35 & 0.45 & 0.55 & 0.64 & 0.72 & 0.79 & 0.85 & 0.89 \\
+      \hline
+    \end{tabular}
+  \end{center}
+  The analytical result is very close to the simulation result that I have with (\textbf{a.c}).
+
+  \item[(b)] The answer in (a) should not change because the mean think time is still the same.
+
+  Another way to explain this is because the distribution is hyperexponential, we can split the CPUs node
+  to 2 think nodes with exponentially distributed think time, and probability of visiting from Bus to them are
+  0.95 and 0.05 respectively. Doing this will not change visit ratios as well as MVA analysis.
+
+  The simulation I ran with (\textbf{b.c}) verifies this conclusion as it is very close to the result of that in (a).
+
+  \item[(c)]
+  Random routing is in (\textbf{c1.c}).
+
+  \bi
+  \item Response time = 11.78523
+
+  \item Bus utilization = 0.29
+  \ei
+
+
+  JSQ routing is in (\textbf{c2.c}).
+
+
+  \bi
+  \item Response time = 8.55359
+
+  \item Bus utilization = 0.379
+  \ei
+
+  \item[(d)] Simulation is in (\textbf{d.c}).
+  \begin{center}
+    \begin{tabular}{ |p{3cm}|c|c|c|c|c|c|c|c|c|c| }
+      \hline
+      m & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\
+      \hline
+      Mean memory request response time & 7.97 & 8.73 & 9.58 & 10.586 & 11.718 & 13.02 & 14.50 & 16.25 & 18.24 & 20.53 \\
+      \hline
+      Bus utilization & 0.12 & 0.237 & 0.347 & 0.45 & 0.55 & 0.63 & 0.70 & 0.77 & 0.832 & 0.88 \\
+      \hline
+    \end{tabular}
+  \end{center}
+
+  As we can see, the response time is slightly longer and bus utilization is slightly smaller.
+
+
+
+  \ee
+
+
+
+
+\end{document}
+
+
+
